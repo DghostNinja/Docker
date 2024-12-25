@@ -1,0 +1,9 @@
+# render.yaml
+services:
+  - type: web
+    name: alpine-container
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    rootDir: .
+    autoDeploy: true
