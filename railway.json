@@ -1,0 +1,10 @@
+{
+  "services": [
+    {
+      "name": "alpine-service",
+      "type": "docker",
+      "dockerfilePath": "./Dockerfile",
+      "rootDirectory": "."
+    }
+  ]
+}
