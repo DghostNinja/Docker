@@ -14,14 +14,35 @@ RUN ssh-keygen -A
 RUN mkdir -p /var/log/supervisor  
 RUN mkdir -p /etc/supervisor.d  
 
-# Create supervisord configuration file  
-RUN echo "[supervisord]\nnodaemon=true\nlogfile=/var/log/supervisor/supervisord.log\nlogfile_maxbytes=50MB\nlogfile_backups=10\nloglevel=info\npidfile=/var/run/supervisord.pid\n\n[include]\nfiles = /etc/supervisor.d/*.ini" > /etc/supervisord.conf  
+# Create supervisord main configuration file  
+RUN echo "[supervisord]\n\
+nodaemon=true\n\
+logfile=/var/log/supervisor/supervisord.log\n\
+logfile_maxbytes=50MB\n\
+logfile_backups=10\n\
+loglevel=info\n\
+pidfile=/var/run/supervisord.pid\n\
+[include]\n\
+files = /etc/supervisor.d/*.ini" > /etc/supervisord.conf  
 
-# Configure SSH service  
-RUN echo "[program:sshd]\ncommand=/usr/sbin/sshd -D\nautostart=true\nautorestart=true\nstderr_logfile=/var/log/sshd.err.log\nstdout_logfile=/var/log/sshd.out.log" > /etc/supervisor.d/sshd.ini  
+# Create SSH configuration for supervisor  
+RUN echo "[program:sshd]\n\
+command=/usr/sbin/sshd -D\n\
+autostart=true\n\
+autorestart=true\n\
+stderr_logfile=/var/log/sshd.err.log\n\
+stdout_logfile=/var/log/sshd.out.log" > /etc/supervisor.d/sshd.ini  
 
-# Configure ttyd service  
-RUN echo "[program:ttyd]\ncommand=ttyd -p 8080 sh\nautostart=true\nautorestart=true\nstderr_logfile=/var/log/ttyd.err.log\nstdout_logfile=/var/log/ttyd.out.log" > /etc/supervisor.d/ttyd.ini  
+# Create ttyd configuration for supervisor  
+RUN echo "[program:ttyd]\n\
+command=ttyd -p 8080 sh\n\
+autostart=true\n\
+autorestart=true\n\
+stderr_logfile=/var/log/ttyd.err.log\n\
+stdout_logfile=/var/log/ttyd.out.log" > /etc/supervisor.d/ttyd.ini  
+
+# Verify configurations  
+RUN ls -l /etc/supervisor.d/ && cat /etc/supervisord.conf  
 
 # Expose ports for SSH and ttyd  
 EXPOSE 22 8080  
