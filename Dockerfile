@@ -18,13 +18,13 @@ pidfile=/var/run/supervisord.pid\n\
 [include]\n\
 files = /etc/supervisor.d/*.ini" > /etc/supervisord.conf
 
-# ttyd Configuration for Supervisor
-RUN echo "[program:ttyd]\n\
-command=/usr/bin/ttyd -p 8080 sh\n\
-autostart=true\n\
-autorestart=true\n\
-stderr_logfile=/var/log/ttyd.err.log\n\
-stdout_logfile=/var/log/ttyd.out.log" > /etc/supervisor.d/ttyd.ini
+# Create the ttyd supervisor configuration with explicit echo to avoid multiline issues
+RUN echo "[program:ttyd]" > /etc/supervisor.d/ttyd.ini && \
+    echo "command=/usr/bin/ttyd -p 8080 sh" >> /etc/supervisor.d/ttyd.ini && \
+    echo "autostart=true" >> /etc/supervisor.d/ttyd.ini && \
+    echo "autorestart=true" >> /etc/supervisor.d/ttyd.ini && \
+    echo "stderr_logfile=/var/log/ttyd.err.log" >> /etc/supervisor.d/ttyd.ini && \
+    echo "stdout_logfile=/var/log/ttyd.out.log" >> /etc/supervisor.d/ttyd.ini
 
 # Verify configuration files
 RUN ls -l /etc/supervisor.d/ && cat /etc/supervisord.conf
