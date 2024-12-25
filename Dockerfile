@@ -8,4 +8,4 @@ RUN apk update && apk add --no-cache bash curl ttyd
 EXPOSE 8080
 
 # Start the web-based terminal emulator (ttyd)
-CMD echo 'Starting web terminal on port 8080' && ttyd sh
+CMD ttyd -p 8080 sh
