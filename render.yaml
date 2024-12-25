@@ -7,3 +7,6 @@ services:
     dockerfilePath: ./Dockerfile
     rootDir: .
     autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 8080
