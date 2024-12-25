@@ -1,19 +1,14 @@
-# Dockerfile
 FROM alpine:latest
 
-LABEL maintainer="your_email@example.com"
+# Install necessary packages
+RUN apk update && apk add --no-cache bash curl openssh
 
-# Install necessary tools: bash, curl, busybox-extras (for HTTP server)
-RUN apk update && apk add --no-cache bash curl busybox-extras
+# Set up SSH
+RUN ssh-keygen -A
+RUN echo "root:Docker!" | chpasswd
 
-# Expose port 8080
-EXPOSE 8080
+# Expose port for SSH and the web server
+EXPOSE 22 8080
 
-# Create the /www directory
-RUN mkdir -p /www
-
-# Create a simple HTML page for interaction
-RUN echo "<h1>Alpine Web Shell</h1><form method='POST' action='/cmd'><input name='cmd' placeholder='Enter command'><button type='submit'>Run</button></form>" > /www/index.html
-
-# Start BusyBox HTTP server on port 8080
-CMD ["sh", "-c", "httpd -f -p 0.0.0.0:8080 -h /www && tail -f /dev/null"]
+# Start SSH server and HTTP server
+CMD /usr/sbin/sshd && echo 'HTTP server started' && while true; do echo -e 'HTTP/1.1 200 OK\n\nAlpine is running' | nc -l -p 8080; done
