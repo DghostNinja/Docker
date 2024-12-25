@@ -1,11 +1,12 @@
-# Use Alpine Linux as the base image
+# Dockerfile
+# Use the official Alpine image
 FROM alpine:latest
 
-# Install basic utilities (optional)
-RUN apk update && apk add bash curl
+# Set a maintainer
+LABEL maintainer="your_email@example.com"
 
-# Set a default command
-CMD ["sh"]
-FROM alpine:latest
-CMD ["sh", "-c", "echo 'Alpine on Render is running' && tail -f /dev/null"]
-EXPOSE 8080
+# Update and install basic utilities
+RUN apk update && apk add --no-cache bash curl
+
+# Set the default command
+CMD ["/bin/sh"]
