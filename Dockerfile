@@ -3,12 +3,14 @@ FROM alpine:latest
 
 LABEL maintainer="your_email@example.com"
 
-# Install necessary tools and Gotty
-RUN apk update && apk add --no-cache bash curl build-base go && \
-    go install github.com/yudai/gotty@latest
+# Install necessary tools: bash, curl, busybox-extras (for HTTP server)
+RUN apk update && apk add --no-cache bash curl busybox-extras
 
-# Expose HTTP port
+# Expose port 8080
 EXPOSE 8080
 
-# Start Gotty for web terminal
-CMD ["/root/go/bin/gotty", "-w", "-p", "8080", "sh"]
+# Create a simple HTML page for interaction
+RUN echo "<h1>Alpine Web Shell</h1><form method='POST' action='/cmd'><input name='cmd' placeholder='Enter command'><button type='submit'>Run</button></form>" > /www/index.html
+
+# Start BusyBox HTTP server on port 8080
+CMD ["sh", "-c", "httpd -f -p 0.0.0.0:8080 -h /www && tail -f /dev/null"]
