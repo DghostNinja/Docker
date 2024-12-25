@@ -1,8 +1,8 @@
 # Use the official Alpine image
 FROM alpine:latest
 
-# Install necessary packages
-RUN apk update && apk add --no-cache bash curl ttyd supervisor
+# Install necessary packages, including ttyd
+RUN apk update && apk add --no-cache bash curl ttyd
 
 # Create necessary directories for supervisor logs and config
 RUN mkdir -p /var/log/supervisor && mkdir -p /etc/supervisor.d
