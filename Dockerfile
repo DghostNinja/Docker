@@ -1,10 +1,10 @@
 # Use the official Alpine image
 FROM alpine:latest
 
-# Install necessary packages, including ttyd
-RUN apk update && apk add --no-cache bash curl ttyd
+# Install necessary packages, including ttyd and supervisor
+RUN apk update && apk add --no-cache bash curl ttyd supervisor
 
-# Create necessary directories for supervisor logs and config
+# Create necessary directories for supervisor logs and configuration
 RUN mkdir -p /var/log/supervisor && mkdir -p /etc/supervisor.d
 
 # Main Supervisord Configuration
@@ -20,7 +20,7 @@ files = /etc/supervisor.d/*.ini" > /etc/supervisord.conf
 
 # ttyd Configuration for Supervisor
 RUN echo "[program:ttyd]\n\
-command=ttyd -p 8080 sh\n\
+command=/usr/bin/ttyd -p 8080 sh\n\
 autostart=true\n\
 autorestart=true\n\
 stderr_logfile=/var/log/ttyd.err.log\n\
