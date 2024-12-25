@@ -9,6 +9,9 @@ RUN apk update && apk add --no-cache bash curl busybox-extras
 # Expose port 8080
 EXPOSE 8080
 
+# Create the /www directory
+RUN mkdir -p /www
+
 # Create a simple HTML page for interaction
 RUN echo "<h1>Alpine Web Shell</h1><form method='POST' action='/cmd'><input name='cmd' placeholder='Enter command'><button type='submit'>Run</button></form>" > /www/index.html
 
